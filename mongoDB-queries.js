@@ -10,20 +10,21 @@ db.restaurants.find({"grades.score": {$gt: 10} });
 db.restaurants.find({grades: { $elemMatch: { score: { $gt: 80, $lt: 100 } } } });
 db.restaurants.find({"address.coord.0": { $lt: -95.754168 } });
 db.restaurants.find({"grades.score": {$gt: 70},"address.coord.0": { $lt: -65.754168 },"cuisine":{$ne:"American"}});
+db.restaurants.find({"cuisine": {$ne:"American"}, "grades.grade" : "A", "borough":{$ne:"Brooklyn"}} );
+db.restaurants.find({ "cuisine": {$ne:"American"}, "grades.grade" : "A", "borough":{$ne:"Brooklyn"} }).sort({ cuisine: -1 });
+db.restaurants.find({ name: { $regex: "^Wil"  }}  ,{ restaurant_id:1, name:1, borough:1, cuisine:1, _id:0 });
+db.restaurants.find({ name: { $regex: "ces$"  }}  ,{ restaurant_id:1, name:1, borough:1, cuisine:1, _id:0 });
+db.restaurants.find({ $or: [ { cuisine:"American"}, {cuisine:"Chinese"  }]  });
+db.restaurants.find({ borough: {$in: ["Staten Island","Queens","Bronx","Brooklyn"]  }});
+db.restaurants.find({ borough: {$nin: ["Staten Island","Queens","Bronx","Brooklyn"]  }});
+db.restaurants.find({ "grades.score": { $lte: 10  }}  ,{ restaurant_id:1, name:1, borough:1, cuisine:1, _id:0 });
+db.restaurants.find({ $and: [{ name: { $regex: "fish", $options:"i"  }}, { $or: [{ cuisine: {$nin: ["American","Chinese"]} }, { name: { $regex: "^(?!.*Wil).+$" }} ]} ]}, { restaurant_id:1, name:1, borough:1, cuisine:1, _id:0 });
+
+db.restaurants.find({ grades: {$elemMatch: {grade: "A", score: 11, "date.$date:1407715200000"} } } , { restaurant_id:1, name:1, grades: {$elemMatch: {grade: "A", score: 11, "date.$date:1407715200000"} }, _id:0 });
+
+db.restaurants.find({ "grades.1.grade": "A", "grades.1.score": 9, "grades.1.date.$date": 1407715200000  }, { restaurant_id: 1, name: 1, "grades.1": 1, _id: 0  });
 
 
-Escriu una consulta per trobar els restaurants que no preparen cap cuisine de 'American' i van aconseguir un marcador més de 70 i localitzat en la longitud menys que -65.754168. Nota: Fes aquesta consulta sense utilitzar $and operador.
-Escriu una consulta per trobar els restaurants que no preparen cap cuisine de 'American' i van obtenir un punt de grau 'A' no pertany a Brooklyn. S'ha de mostrar el document segons la cuisine en ordre descendent.
-Escriu una consulta per trobar el restaurant_id, name, borough i cuisine per a aquells restaurants que contenen 'Wil' com les tres primeres lletres en el seu nom.
-Escriu una consulta per trobar el restaurant_id, name, borough i cuisine per a aquells restaurants que contenen 'ces' com les últimes tres lletres en el seu nom.
-Escriu una consulta per trobar el restaurant_id, name, borough i cuisine per a aquells restaurants que contenen 'Reg' com tres lletres en algun lloc en el seu nom.
-Escriu una consulta per trobar els restaurants que pertanyen al Bronx i van preparar qualsevol plat americà o xinès.
-Escriu una consulta per trobar el restaurant_id, name, borough i cuisine per a aquells restaurants que pertanyen a Staten Island o Queens o Bronx o Brooklyn.
-Escriu una consulta per trobar el restaurant_id, name, borough i cuisine per a aquells restaurants que no pertanyen a Staten Island o Queens o Bronx o Brooklyn.
-Escriu una consulta per trobar el restaurant_id, name, borough i cuisine per a aquells restaurants que aconsegueixin un marcador que no és més de 10.
-Escriu una consulta per trobar el restaurant_id, name, borough i cuisine per a aquells restaurants que preparen peix excepte 'American' i 'Chinees' o el name del restaurant comença amb lletres 'Wil'.
-Escriu una consulta per trobar el restaurant_id, name, i grades per a aquells restaurants que aconsegueixin un grau "A" i un score 11 en dades d'estudi ISODate "2014-08-11T00:00:00Z".
-Escriu una consulta per trobar el restaurant_id, name i grades per a aquells restaurants on el 2n element de varietat de graus conté un grau de "A" i marcador 9 sobre un ISODate "2014-08-11T00:00:00Z".
 Escriu una consulta per trobar el restaurant_id, name, adreça i ubicació geogràfica per a aquells restaurants on el segon element del array coord conté un valor que és més de 42 i fins a 52.
 Escriu una consulta per organitzar el nom dels restaurants en ordre ascendent juntament amb totes les columnes.
 Escriu una consulta per organitzar el nom dels restaurants en ordre descendent juntament amb totes les columnes.
